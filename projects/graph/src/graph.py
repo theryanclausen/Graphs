@@ -39,6 +39,11 @@ class Graph:
             self.vertices[v2].add(v1)
         else:
             raise IndexError('That vertex does not exist')
+    def add_directed_edge(self, v1, v2):
+        if v1 in self.vertices and v2 in self.vertices:
+            self.vertices[v1].add(v2)
+        else:
+            raise IndexError("That vertex does not exist")
     def bft(self, starting_vertex_id):
         q = Queue()
         visited = set()
@@ -72,30 +77,35 @@ class Graph:
 
     def bfs(self, starting_vertex_id, target):
         q = Queue()
-        visited = set()
+        paths = {starting_vertex_id:[starting_vertex_id]}
         q.enqueue(starting_vertex_id)
         while q.size() > 0:
             current = q.dequeue()
-            if current == target:
-                return True
-            if current not in visited:
-                visited.add(current)
-                for neighbor in self.vertices[current]:
+            for neighbor in self.vertices[current]:
+                if neighbor not in paths:
+                    paths[neighbor] = list(paths[current])
+                    paths[neighbor].append(neighbor)
                     q.enqueue(neighbor)
+
+                    if neighbor == target:
+                        return paths[neighbor]
         return False
 
     def dfs(self, starting_vertex_id, target):
         s = Stack()
-        visited = set()
+        paths = {starting_vertex_id:[starting_vertex_id]}
         s.push(starting_vertex_id)
         while s.size() > 0:
             current = s.pop()
-            if current == target:
-                return True
-            if current not in visited:
-                visited.add(current)
-                for neighbor in self.vertices[current]:
+            for neighbor in self.vertices[current]:
+                if neighbor not in paths:
+                    paths[neighbor] = list(paths[current])
+                    paths[neighbor].append(neighbor)
                     s.push(neighbor)
+
+                    if neighbor == target:
+                        return paths[neighbor]        
+
         return False
 
 graph = Graph()  # Instantiate your graph
@@ -106,16 +116,16 @@ graph.add_vertex('4')
 graph.add_vertex('5')
 graph.add_vertex('6')
 graph.add_vertex('7')
-graph.add_edge('5', '3')
-graph.add_edge('6', '3')
-graph.add_edge('7', '1')
-graph.add_edge('4', '7')
-graph.add_edge('1', '2')
-graph.add_edge('7', '6')
-graph.add_edge('2', '4')
-graph.add_edge('3', '5')
-graph.add_edge('2', '3')
-graph.add_edge('4', '6')
+graph.add_directed_edge('5', '3')
+graph.add_directed_edge('6', '3')
+graph.add_directed_edge('7', '1')
+graph.add_directed_edge('4', '7')
+graph.add_directed_edge('1', '2')
+graph.add_directed_edge('7', '6')
+graph.add_directed_edge('2', '4')
+graph.add_directed_edge('3', '5')
+graph.add_directed_edge('2', '3')
+graph.add_directed_edge('4', '6')
 
-# graph.rdft('1')
+print(graph.dfs('1', '7'))
 # print(graph.dfs('1','79'))
