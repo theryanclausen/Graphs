@@ -105,7 +105,7 @@ class Graph:
 
                     if neighbor == target:
                         return paths[neighbor]        
-
+        
         return False
 
 graph = Graph()  # Instantiate your graph
@@ -127,5 +127,6 @@ graph.add_directed_edge('3', '5')
 graph.add_directed_edge('2', '3')
 graph.add_directed_edge('4', '6')
 
-print(graph.dfs('1', '7'))
+print(graph.dfs('4', '5'))
+print(graph.bfs('4', '5'))
 # print(graph.dfs('1','79'))
