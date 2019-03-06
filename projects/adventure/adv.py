@@ -29,10 +29,11 @@ def oppositeDir(dir):
     if dir == 'w':
         return 'e'
 
-def move(av, dir):
+def move(av, dir, back = False):
     av.travel(dir)
     traversalPath.append(dir)
-    breadCrumbsToStart.append(oppositeDir(dir))
+    if not back:
+        breadCrumbsToStart.append(oppositeDir(dir))
 
 # FILL THIS IN
 traversalPath = ['n']
@@ -40,8 +41,8 @@ breadCrumbsToStart = ['s']
 graphMap = {}
 
 player.currentRoom = world.startingRoom
-# while len(graphMap) < len(roomGraph):
-while len(graphMap) < 25:
+while len(graphMap) < len(roomGraph):
+# while len(graphMap) < 498:
     room = player.currentRoom
 
     #add new room to graph map
@@ -61,20 +62,25 @@ while len(graphMap) < 25:
 
     roomDirectory = graphMap[room.id]
     
-    if '?' in roomDirectory.values():
+    if not '?' in roomDirectory.values():
+        while len(breadCrumbsToStart) and not '?' in graphMap[player.currentRoom.id].values():
+            backStep = breadCrumbsToStart.pop()
+            move(player, backStep, True)    
+    else:    
         for key,value in roomDirectory.items():
             if value == '?':
+                nextRoom = room.getRoomInDirection(key)
+                roomDirectory[key] = nextRoom.id
                 move(player, key)
                 break
-    else:
-        while not '?' in graphMap[player.currentRoom.id].values():
-            backStep = breadCrumbsToStart.pop()
-            move(player, backStep)
+
+            
     
     
 print(graphMap)
 
-
+print(breadCrumbsToStart)
+print(player.currentRoom)
 
 
 # TRAVERSAL TEST
