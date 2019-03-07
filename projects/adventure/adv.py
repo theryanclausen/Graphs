@@ -36,13 +36,13 @@ def move(av, dir, back = False):
         breadCrumbsToStart.append(oppositeDir(dir))
 
 # FILL THIS IN
-traversalPath = ['n']
-breadCrumbsToStart = ['s']
+traversalPath = []
+breadCrumbsToStart = []
 graphMap = {}
 
 player.currentRoom = world.startingRoom
+
 while len(graphMap) < len(roomGraph):
-# while len(graphMap) < 498:
     room = player.currentRoom
 
     #add new room to graph map
@@ -52,7 +52,8 @@ while len(graphMap) < len(roomGraph):
         graphMap[room.id] = {}
         for exit in exits:
             graphMap[room.id][exit] = '?'
-
+    if len(graphMap) == len(roomGraph):
+        break
     #add previous room relative to current room
 
     if len(breadCrumbsToStart):
@@ -65,7 +66,7 @@ while len(graphMap) < len(roomGraph):
     if not '?' in roomDirectory.values():
         while len(breadCrumbsToStart) and not '?' in graphMap[player.currentRoom.id].values():
             backStep = breadCrumbsToStart.pop()
-            move(player, backStep, True)    
+            move(player, backStep, True)  
     else:    
         for key,value in roomDirectory.items():
             if value == '?':
