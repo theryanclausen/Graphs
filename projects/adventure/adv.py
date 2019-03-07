@@ -67,21 +67,39 @@ while len(graphMap) < len(roomGraph):
         while len(breadCrumbsToStart) and not '?' in graphMap[player.currentRoom.id].values():
             backStep = breadCrumbsToStart.pop()
             move(player, backStep, True)  
-    else:    
+    else:
+        # nextExitOptions = {}
+        # adjacentDeadEnd = False
         for key,value in roomDirectory.items():
             if value == '?':
                 nextRoom = room.getRoomInDirection(key)
                 roomDirectory[key] = nextRoom.id
                 move(player, key)
                 break
+                # attempt to optimize by going to adjacent deadends first
+        #         nextRoom = room.getRoomInDirection(key)
+        #         nextExits = nextRoom.getExits()
+        #         if len(nextExits) == 1:
+        #             adjacentDeadEnd = True
+        #             roomDirectory[key] = nextRoom.id
+        #             move(player, key)
+        #             break
+        #         else:
+        #             nextExitOptions[key] = len(nextExits)
+        # if not adjacentDeadEnd:
+        #     direction = min(nextExitOptions, key=nextExitOptions.get)
+        #     nextRoom = room.getRoomInDirection(direction)
+        #     roomDirectory[direction] = nextRoom.id
+        #     move(player, direction)
+
+
+                
+                
 
             
     
     
-print(graphMap)
 
-print(breadCrumbsToStart)
-print(player.currentRoom)
 
 
 # TRAVERSAL TEST
